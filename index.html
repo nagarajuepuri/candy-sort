@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Candy Sort</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <meta name="theme-color" content="#0ea5e9">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/candysort-styles.css" />
+    </head>
+    <body>
+        <h1>Candy Sort</h1>
+
+        <div class="controls">
+            <label for="level-select">Level:
+                <select id="level-select">
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </label>
+            <button id="new-game-btn">New Game</button>
+            <span id="move-counter">Moves: 0</span>
+        </div>
+
+        <div id="game-board" class="game-board"></div>
+        <div id="win-banner" style="display:none;"></div>
+
+        <script src="js/candysort-engine.js"></script>
+    </body>
+</html>

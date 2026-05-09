@@ -1,0 +1,257 @@
+/* ── Reset & base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    min-height: 100dvh;
+    background-color: #f0f9ff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #0f172a;
+    text-align: center;
+    padding: 1rem env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+h1 {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #0369a1;
+    margin-bottom: 0.75rem;
+}
+
+/* ── Controls ─────────────────────────────────────── */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.controls select,
+.controls button {
+    min-height: 44px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.controls select {
+    background: #fff;
+    color: #0f172a;
+    border: 1.5px solid #bae6fd;
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 1.8rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230369a1' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.55rem center;
+}
+
+.controls select option {
+    background: #fff;
+    color: #0f172a;
+}
+
+.controls button {
+    background: #0ea5e9;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(14,165,233,0.3);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.controls button:hover {
+    background: #0284c7;
+    box-shadow: 0 4px 12px rgba(14,165,233,0.35);
+}
+
+.controls button:active {
+    transform: scale(0.96);
+    box-shadow: 0 1px 4px rgba(14,165,233,0.2);
+}
+
+#move-counter {
+    font-weight: 700;
+    font-size: 1rem;
+    min-width: 80px;
+    background: #fff;
+    color: #0369a1;
+    border: 1.5px solid #bae6fd;
+    padding: 0.35rem 0.75rem;
+    border-radius: 10px;
+}
+
+/* ── Game board ───────────────────────────────────── */
+.game-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 1.25rem;
+    border: 1.5px solid #bae6fd;
+    box-shadow: 0 4px 24px rgba(14,165,233,0.1), 0 1px 4px rgba(0,0,0,0.06);
+    width: fit-content;
+    max-width: 96vw;
+    margin: 0 auto;
+}
+
+/* ── Tubes ────────────────────────────────────────── */
+.tube {
+    width: 44px;
+    height: 160px;
+    border: 2px solid #94a3b8;
+    border-top: none;
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+    background: #f8fafc;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.08);
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: box-shadow 0.15s, transform 0.15s;
+    position: relative;
+}
+
+.tube.selected {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.35), inset 0 2px 6px rgba(0,0,0,0.05);
+    transform: translateY(-4px);
+}
+
+@media (min-width: 480px) {
+    .tube {
+        width: 52px;
+        height: 180px;
+        border-bottom-left-radius: 26px;
+        border-bottom-right-radius: 26px;
+    }
+}
+
+/* ── Candy container ──────────────────────────────── */
+.candy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 3px;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Candy pieces ─────────────────────────────────── */
+.candy {
+    width: 100%;
+    flex-grow: 1;
+    border-radius: 50px;
+    background: #f8fafc;
+    position: relative;
+    transition: none;
+}
+
+.candy[style] {
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ── Lifted (pop-up on select) ────────────────────── */
+@keyframes pop-up {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(-14px) scale(1.06); }
+}
+
+.candy.lifted {
+    animation: pop-up 0.18s ease-out forwards;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 6px 14px rgba(0,0,0,0.2) !important;
+    z-index: 2;
+}
+
+/* ── Fly-out (source candies leaving) ─────────────── */
+@keyframes fly-out {
+    0%   { transform: translateY(-14px) scale(1.06); opacity: 1; }
+    100% { transform: translateY(-52px) scale(0.65); opacity: 0; }
+}
+
+.candy.fly-out {
+    animation: fly-out 0.2s ease-in forwards;
+    z-index: 3;
+}
+
+/* ── Fly-in (destination candies arriving) ────────── */
+@keyframes fly-in {
+    0%   { transform: translateY(-36px) scale(0.8); opacity: 0; }
+    60%  { transform: translateY(5px) scale(1.07); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.candy.fly-in {
+    animation: fly-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 2;
+}
+
+/* ── Win banner ───────────────────────────────────── */
+@keyframes win-pop {
+    0%   { transform: scale(0.7); opacity: 0; }
+    70%  { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#win-banner {
+    margin: 1.25rem auto 0;
+    max-width: 340px;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border: 1.5px solid #bae6fd;
+    border-radius: 1.25rem;
+    box-shadow: 0 4px 24px rgba(14,165,233,0.15);
+    color: #0f172a;
+    animation: win-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+#win-banner .win-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0369a1;
+    margin-bottom: 0.25rem;
+}
+
+#win-banner .win-sub {
+    font-size: 1rem;
+    color: #475569;
+    margin-bottom: 1rem;
+}
+
+#win-banner button {
+    padding: 0.5rem 1.5rem;
+    min-height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: #0ea5e9;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(14,165,233,0.3);
+    transition: transform 0.1s, background 0.1s;
+}
+
+#win-banner button:hover {
+    background: #0284c7;
+}
+
+#win-banner button:active {
+    transform: scale(0.96);
+}
