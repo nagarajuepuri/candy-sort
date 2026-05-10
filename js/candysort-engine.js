@@ -236,8 +236,14 @@ document.addEventListener("DOMContentLoaded", function() {
     var levelSelect = document.getElementById("level-select");
     var newGameBtn = document.getElementById("new-game-btn");
 
+    //random level generator
+    var randomLevel = parseInt(Math.random()*levelSelect.length);
+    randomLevel = levelSelect[randomLevel].value;
+    //console.log(randomLevel);
+    
     function startGame() {
-        var level = levelSelect ? parseInt(levelSelect.value, 10) : 4;
+        levelSelect.value = randomLevel;
+        var level = levelSelect ? parseInt(randomLevel, 10) : 4;
         game1.init(level, "game-board");
     }
 
